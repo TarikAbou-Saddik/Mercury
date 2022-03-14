@@ -1,0 +1,8 @@
+{
+  "version": 3,
+  "sources": ["../../../../../../Users/tarik/Documents/Programming Projects/Portfolio/React Projects/2022/mercury/api/collections.ts"],
+  "sourceRoot": "/var/folders/d5/2n8lqqgj261b5r1v12tb70100000gn/T/tmp-26001-5acuNJq3yUoa",
+  "sourcesContent": ["import { Handler } from '@netlify/functions';\n\nconst handler: Handler = async (event, context) => {\n  return {\n    statusCode: 200,\n    body: JSON.stringify({ message: 'Hello World' }),\n  };\n};\n\nexport { handler };\n"],
+  "mappings": ";;;;;;;;;AAAA;AAAA;AAAA;AAEA,IAAM,UAAmB,OAAO,OAAO,YAAY;AACjD,SAAO;AAAA,IACL,YAAY;AAAA,IACZ,MAAM,KAAK,UAAU,EAAE,SAAS;AAAA;AAAA;",
+  "names": []
+}

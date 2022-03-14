@@ -1,6 +1,6 @@
 {
-  "short_name": "React App",
-  "name": "Create React App Sample",
+  "short_name": "Mercury",
+  "name": "Mercury: a simple weather dashboard using the Unsplash and OpenWeather APIs",
   "icons": [
     {
       "src": "favicon.ico",
