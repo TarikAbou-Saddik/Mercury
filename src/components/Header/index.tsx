@@ -22,7 +22,10 @@ const HeaderWrapper = styled.div`
   color: #2c2b2b;
   font-size: 1.5rem;
   border-radius: 15px;
-  font-weight: bold;
+
+  & h1 {
+    font-weight: 300;
+  }
 `;
 
 export default Header;
