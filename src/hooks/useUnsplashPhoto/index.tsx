@@ -1,16 +1,19 @@
 import { useEffect, useState } from 'react';
-import { CollectionType, Photo } from './types';
+import { getInfoByTimeOfDay, getRandomNumber } from '../../utils';
+import { TimeOfDay } from '../../global/types';
+import { Photo } from './types';
 
 const useUnsplashPhoto = () => {
   const [photo, setPhoto] = useState<Photo | null>(null);
 
   useEffect(() => {
     const getPhoto = async (): Promise<void> => {
+      const collection = getInfoByTimeOfDay(getCollectionIdByType);
       const response = await fetch(
-        `/api/unsplashCollections?collectionId=${getCollectionIdByTime()}`,
+        `/api/unsplashCollections?collectionId=${collection}`,
       );
       const { photos } = await response.json();
-      const photo = photos[Math.floor(Math.random() * photos.length)];
+      const photo = photos[getRandomNumber(photos.length)];
       setPhoto({
         id: photo.id,
         description: photo.description,
@@ -35,26 +38,13 @@ const useUnsplashPhoto = () => {
 };
 
 // TODO: Eventually, just grab the collections from my user through the API.
-const getCollectionIdByType = (type: CollectionType) => {
+const getCollectionIdByType = (type: TimeOfDay) => {
   const ids = {
     Morning: 48980708,
     Afternoon: 85266674,
     Evening: 73694709,
   };
   return ids[type];
-};
-
-const getCollectionIdByTime = (): number => {
-  const hour = new Date().getHours();
-  const isMorning = hour >= 5 && hour < 12;
-  const isAfternoon = hour >= 12 && hour < 17;
-  if (isMorning) {
-    return getCollectionIdByType('Morning');
-  }
-  if (isAfternoon) {
-    return getCollectionIdByType('Afternoon');
-  }
-  return getCollectionIdByType('Evening');
 };
 
 export default useUnsplashPhoto;

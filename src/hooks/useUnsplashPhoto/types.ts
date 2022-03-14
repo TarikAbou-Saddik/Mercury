@@ -1,4 +1,3 @@
-export type CollectionType = 'Morning' | 'Afternoon' | 'Evening';
 export type UnsplashUser = {
   id: string;
   name: string;
