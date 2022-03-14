@@ -1,10 +1,16 @@
 import styled from 'styled-components';
 import { getInfoByTimeOfDay } from '../../utils';
 
-const Header = () => {
+type HeaderProps = {
+  userName?: string;
+};
+
+const Header = ({ userName }: HeaderProps) => {
   return (
     <HeaderWrapper>
-      <h1>Good {getInfoByTimeOfDay(timeOfDay => timeOfDay)}, Tarik</h1>
+      <h1>
+        Good {getInfoByTimeOfDay(timeOfDay => timeOfDay)}, {userName}
+      </h1>
     </HeaderWrapper>
   );
 };
