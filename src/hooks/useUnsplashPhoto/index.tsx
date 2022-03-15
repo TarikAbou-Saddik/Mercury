@@ -32,9 +32,7 @@ const useUnsplashPhoto = () => {
     getPhoto();
   }, []);
 
-  return {
-    photo,
-  };
+  return photo;
 };
 
 // TODO: Eventually, just grab the collections from my user through the API.

@@ -8,7 +8,7 @@ import { Wrapper, Image } from './styles';
 const App = () => {
   const [isImageLoaded, setIsImageLoaded] = useState(false);
   const [isConfigured, setIsConfigured] = useState(false);
-  const { photo } = useUnsplashPhoto();
+  const photo = useUnsplashPhoto();
 
   return (
     <Wrapper className={`${isImageLoaded ? '' : 'hidden'}`}>
@@ -17,11 +17,12 @@ const App = () => {
         src={photo?.fullImageUrl}
         onLoad={() => setIsImageLoaded(true)}
       />
-      {isConfigured ? (
-        <Forecast isLoaded={isImageLoaded} />
-      ) : (
-        <Configure onSubmit={() => setIsConfigured(true)} />
-      )}
+      {isImageLoaded &&
+        (isConfigured ? (
+          <Forecast />
+        ) : (
+          <Configure onSubmit={() => setIsConfigured(true)} />
+        ))}
       {photo?.user && <UserCredit {...photo.user} />}
     </Wrapper>
   );

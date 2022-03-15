@@ -1,13 +1,25 @@
+import styled from 'styled-components';
+import useOpenWeatherForecast from '../../hooks/useOpenWeatherForecast';
+import useSessionStorage from '../../hooks/useSessionStorage';
 import Header from '../Header';
-import { useUserName } from '../../global/context';
+import WeatherIcon from '../WeatherIcon';
 
-type ForecastProps = {
-  isLoaded: boolean;
+const Forecast = () => {
+  const [userName] = useSessionStorage('userName', '');
+  const [location] = useSessionStorage('location', {});
+  const forecast = useOpenWeatherForecast(location);
+
+  console.log(forecast);
+
+  return (
+    <ForecastWrapper>
+      <Header userName={userName}>
+        <WeatherIcon icon={forecast?.weather} />
+      </Header>
+    </ForecastWrapper>
+  );
 };
 
-const Forecast = ({ isLoaded }: ForecastProps) => {
-  const user = useUserName();
-  return isLoaded ? <Header userName={user ? user[0] : ''} /> : null;
-};
+const ForecastWrapper = styled.div``;
 
 export default Forecast;

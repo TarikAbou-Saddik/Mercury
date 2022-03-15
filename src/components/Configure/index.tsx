@@ -1,27 +1,50 @@
-import styled from 'styled-components';
+import { FormEvent, useState, useRef } from 'react';
 import { faCircleXmark } from '@fortawesome/free-solid-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { FormEvent } from 'react';
-import { useUserName, useCity } from '../../global/context';
+import CitySelector from '../CitySelector';
+import useSessionStorage from '../../hooks/useSessionStorage';
+import { Location } from '../../hooks/useGeoCodeByLocation';
+import {
+  Wrapper,
+  FormWrapper,
+  Label,
+  InputWrapper,
+  Input,
+  Icon,
+  Button,
+} from './styles';
 
 type ConfigureProps = {
   onSubmit: () => void;
 };
 
-const Configure = ({ onSubmit }: ConfigureProps) => {
-  const user = useUserName();
-  const userName = (user && user[0]) || '';
-  const setUserName = (value: string) =>
-    user && user[1]({ type: 'SET_NAME', payload: value });
+const defaultLocation: Location = {
+  name: '',
+  lon: null,
+  lat: null,
+  state: '',
+  country: '',
+};
 
-  const cityInfo = useCity();
-  const city = (cityInfo && cityInfo[0]) || '';
-  const setCity = (value: string) =>
-    cityInfo && cityInfo[1]({ type: 'SET_CITY', payload: value });
+const Configure = ({ onSubmit }: ConfigureProps) => {
+  const cityInput = useRef(null);
+  const [locationQuery, setLocationQuery] = useState('');
+  const [userName, setUserName] = useSessionStorage('userName', '');
+  const setLocation = useSessionStorage('location', defaultLocation)[1];
 
   const handleFormSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     onSubmit();
+  };
+
+  const onSelectLocation = (location: Location) => {
+    setLocation(location);
+    setLocationQuery(
+      `${location.name}, ${location.state}, ${location.country}`,
+    );
+  };
+
+  const onChangeLocation = (value: string) => {
+    setLocationQuery(value);
   };
 
   return (
@@ -50,107 +73,27 @@ const Configure = ({ onSubmit }: ConfigureProps) => {
             <Input
               type='text'
               placeholder='Enter your city...'
-              value={city}
-              onChange={e => setCity(e.target.value)}
+              value={locationQuery}
+              onChange={e => onChangeLocation(e.target.value)}
+              ref={cityInput}
             />
             <Icon
-              className={city.length > 0 ? '' : 'hidden'}
+              className={locationQuery.length > 0 ? '' : 'hidden'}
               icon={faCircleXmark}
-              onClick={() => setCity('')}
+              onClick={() => setLocationQuery('')}
             />
           </InputWrapper>
         </Label>
         <Button>Submit</Button>
       </FormWrapper>
+      {document.activeElement === cityInput.current && (
+        <CitySelector
+          locationString={locationQuery}
+          onSelect={onSelectLocation}
+        />
+      )}
     </Wrapper>
   );
 };
-
-const Wrapper = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  position: absolute;
-  top: calc(40% - 30vh / 2);
-  left: calc(50% - 30vw / 2);
-  width: 30vw;
-  background-color: rgba(255, 255, 255, 0.9);
-  border-radius: 20px;
-  padding: 3vh;
-
-  & h1 {
-    font-weight: 300;
-    font-size: 5rem;
-  }
-`;
-
-const FormWrapper = styled.form`
-  height: 30vh;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-around;
-  align-items: center;
-`;
-
-const Button = styled.button`
-  width: 50%;
-  height: 5vh;
-  cursor: pointer;
-  font-size: 1rem;
-  border: none;
-  background-color: white;
-  border-radius: 5px;
-  transition: all 0.3s ease-in;
-  transition-property: background color;
-
-  &:hover {
-    background: black;
-    color: white;
-  }
-`;
-
-const Icon = styled(FontAwesomeIcon)`
-  color: grey;
-  font-size: 1.2rem;
-  transition: color 0.2s ease-in;
-  opacity: 1;
-
-  &:hover {
-    color: black;
-  }
-
-  &.hidden {
-    opacity: 0;
-  }
-`;
-
-const InputWrapper = styled.div`
-  margin-top: 10px;
-  display: flex;
-  align-items: center;
-  background: white;
-  padding: 2px 10px;
-  border-radius: 10px;
-  box-shadow: rgb(15 15 15 / 10%) 0px 0px 0px 1px inset;
-  &:focus {
-    background: aqua;
-  }
-`;
-
-const Input = styled.input`
-  width: 15vw;
-  height: 5vh;
-  border: none;
-  font-size: 1.1rem;
-  &:focus {
-    outline: none;
-  }
-`;
-
-const Label = styled.label`
-  display: flex;
-  flex-direction: column;
-  cursor: pointer;
-`;
 
 export default Configure;

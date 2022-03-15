@@ -1,9 +1,10 @@
 import { createContext, useReducer, ReactNode, useContext } from 'react';
+import { Location } from '../hooks/useGeoCodeByLocation';
 
-type State = { userName: string; city: string };
+type State = { userName: string; city: Location };
 type Action =
   | { type: 'SET_NAME'; payload: string }
-  | { type: 'SET_CITY'; payload: string };
+  | { type: 'SET_CITY'; payload: Location };
 type Dispatch = (action: Action) => void;
 type UserProviderProps = { children?: ReactNode };
 type ContextType = { state: State; dispatch: Dispatch } | undefined;
@@ -27,8 +28,19 @@ const userReducer = (state: State, action: Action) => {
   }
 };
 
+const initialState: State = {
+  userName: '',
+  city: {
+    name: '',
+    lon: null,
+    lat: null,
+    state: '',
+    country: '',
+  },
+};
+
 const UserProvider = ({ children }: UserProviderProps) => {
-  const [state, dispatch] = useReducer(userReducer, { userName: '', city: '' });
+  const [state, dispatch] = useReducer(userReducer, initialState);
   const value = { state, dispatch };
   return <UserContext.Provider value={value}>{children}</UserContext.Provider>;
 };
@@ -48,7 +60,7 @@ const useUserName = () => {
 const useCity = () => {
   const context = useContext(UserContext);
   if (context) {
-    const value: [city: string, dispatch: Dispatch] = [
+    const value: [city: Location | {}, dispatch: Dispatch] = [
       context?.state.city,
       context?.dispatch,
     ];

@@ -1,16 +1,19 @@
 import styled from 'styled-components';
+import { ReactNode } from 'react';
 import { getInfoByTimeOfDay } from '../../utils';
 
 type HeaderProps = {
   userName?: string;
+  children?: ReactNode;
 };
 
-const Header = ({ userName }: HeaderProps) => {
+const Header = ({ userName, children }: HeaderProps) => {
   return (
     <HeaderWrapper>
       <h1>
         Good {getInfoByTimeOfDay(timeOfDay => timeOfDay)}, {userName}
       </h1>
+      {children}
     </HeaderWrapper>
   );
 };

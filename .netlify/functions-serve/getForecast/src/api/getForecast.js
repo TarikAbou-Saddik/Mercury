@@ -4510,7 +4510,7 @@ var init_multipart_parser = __esm({
   }
 });
 
-// api/geocode.ts
+// api/getForecast.ts
 __export(exports, {
   handler: () => handler
 });
@@ -5682,20 +5682,20 @@ function fixResponseChunkedTransferBadEnding(request, errorCallback) {
   });
 }
 
-// api/geocode.ts
+// api/getForecast.ts
 var API_ENDPOINT = "http://api.openweathermap.org";
 var handler = async (event, context) => {
-  let response = createResponse(404, { error: "Failed to find location" });
+  let response = createResponse(404, {
+    error: "Failed to fetch forecast for location"
+  });
   try {
     const params = event.queryStringParameters;
-    if (params && "location" in params) {
-      const locations = await getLocationsByName(params.location);
-      response = createResponse(200, { locations });
+    if (params && "lat" in params && "lon" in params) {
+      const forecast = await getForecastByCoords(params.lon, params.lat);
+      response = createResponse(200, { forecast });
     }
   } catch (error) {
-    response = createResponse(500, {
-      error: "An unexpected error has occurred"
-    });
+    response = createResponse(500, { error });
   }
   return response;
 };
@@ -5703,8 +5703,8 @@ var createResponse = (statusCode, jsonBody) => ({
   statusCode,
   body: JSON.stringify(jsonBody)
 });
-var getLocationsByName = async (locationQuery, resultLimit = 5) => {
-  const response = await fetch(`${API_ENDPOINT}/geo/1.0/direct?q=${locationQuery}&limit=${resultLimit}&appid=${process.env.OPENWEATHER_API_KEY}`);
+var getForecastByCoords = async (lon, lat, units = "metric") => {
+  const response = await fetch(`${API_ENDPOINT}/data/2.5/weather?lat=${lat}&lon=${lon}&units=${units}&appid=${process.env.OPENWEATHER_API_KEY}`);
   if (!response.ok) {
     throw new Error(`An error has ocurred. Status Code ${response.status} returned.`);
   }
@@ -5717,4 +5717,4 @@ var getLocationsByName = async (locationQuery, resultLimit = 5) => {
 /*! fetch-blob. MIT License. Jimmy Wärting <https://jimmy.warting.se/opensource> */
 /*! formdata-polyfill. MIT License. Jimmy Wärting <https://jimmy.warting.se/opensource> */
 /*! node-domexception. MIT License. Jimmy Wärting <https://jimmy.warting.se/opensource> */
-//# sourceMappingURL=geocode.js.map
+//# sourceMappingURL=getForecast.js.map
