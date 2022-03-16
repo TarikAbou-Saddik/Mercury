@@ -7,7 +7,12 @@ export const Wrapper = styled.div`
     opacity: 0.3;
   }
 `;
-export const Content = styled.div``;
+export const Content = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+`;
 
 export const Image = styled.img`
   width: 100%;

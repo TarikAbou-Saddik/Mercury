@@ -5704,7 +5704,7 @@ var createResponse = (statusCode, jsonBody) => ({
   body: JSON.stringify(jsonBody)
 });
 var getForecastByCoords = async (lon, lat, units = "metric") => {
-  const response = await fetch(`${API_ENDPOINT}/data/2.5/weather?lat=${lat}&lon=${lon}&units=${units}&appid=${process.env.OPENWEATHER_API_KEY}`);
+  const response = await fetch(`${API_ENDPOINT}/data/2.5/onecall?lat=${lat}&lon=${lon}&units=${units}&exclude=minutely,hourly&appid=${process.env.OPENWEATHER_API_KEY}`);
   if (!response.ok) {
     throw new Error(`An error has ocurred. Status Code ${response.status} returned.`);
   }

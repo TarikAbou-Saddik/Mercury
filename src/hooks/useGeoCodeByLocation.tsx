@@ -17,7 +17,7 @@ const useGeoCodeByLocation = (location: string) => {
 
   const mapToLocation = (location: any): Location => ({
     name: location.name,
-    state: location.state,
+    state: location.state || '',
     country: location.country,
     lat: location.lat,
     lon: location.lon,
@@ -37,6 +37,13 @@ const useGeoCodeByLocation = (location: string) => {
   }, [location]);
 
   return location in locations ? locations[location] : [];
+};
+
+export const locationToString = ({ name, state, country }: Location) => {
+  if (state.length) {
+    return `${name}, ${state}, ${country}`;
+  }
+  return `${name}, ${country}`;
 };
 
 export default useGeoCodeByLocation;

@@ -1,6 +1,9 @@
 import { useState } from 'react';
 
-const useSessionStorage = (key: string, initialValue: any) => {
+function useSessionStorage<T>(
+  key: string,
+  initialValue?: T,
+): [savedValue: T, setValue: (value: T) => void] {
   const [savedValue, setSavedValue] = useState(() => {
     try {
       const item = window.sessionStorage.getItem(key);
@@ -11,9 +14,9 @@ const useSessionStorage = (key: string, initialValue: any) => {
     }
   });
 
-  const setValue = (value: any) => {
+  const setValue = (value: T) => {
     try {
-      const valueToStore =
+      const valueToStore: T =
         value instanceof Function ? value(savedValue) : value;
       setSavedValue(valueToStore);
       window.sessionStorage.setItem(key, JSON.stringify(valueToStore));
@@ -23,6 +26,6 @@ const useSessionStorage = (key: string, initialValue: any) => {
   };
 
   return [savedValue, setValue];
-};
+}
 
 export default useSessionStorage;

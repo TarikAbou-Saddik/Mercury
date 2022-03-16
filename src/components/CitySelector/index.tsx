@@ -1,6 +1,7 @@
 import styled from 'styled-components';
 import useGeoCodeByLocation, {
   Location,
+  locationToString,
 } from '../../hooks/useGeoCodeByLocation';
 
 type CitySelectorProps = {
@@ -10,14 +11,13 @@ type CitySelectorProps = {
 
 const CitySelector = ({ locationString, onSelect }: CitySelectorProps) => {
   const locations = useGeoCodeByLocation(locationString);
+
   return (
     <CitiesWrapper>
       {locations.length > 0 &&
-        locations.map((location: any, idx: number) => (
+        locations.map((location, idx: number) => (
           <City key={idx} onClick={() => onSelect({ ...location })}>
-            <h4>
-              {location.name}, {location.state}, {location.country}
-            </h4>
+            <h4>{locationToString(location)}</h4>
           </City>
         ))}
     </CitiesWrapper>
@@ -36,7 +36,6 @@ const City = styled.div`
   cursor: pointer;
   height: 4vh;
   padding: 5px 10px;
-  border-radius: inherit;
   transition: all 0.2s ease-in;
   & h4 {
     font-weight: 300;

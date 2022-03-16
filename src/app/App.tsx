@@ -3,12 +3,12 @@ import Configure from '../components/Configure';
 import Forecast from '../components/Forecast';
 import UserCredit from '../components/UserCredit';
 import useUnsplashPhoto from '../hooks/useUnsplashPhoto';
-import { Wrapper, Image } from './styles';
+import { Wrapper, Image, Content } from './styles';
 
 const App = () => {
   const [isImageLoaded, setIsImageLoaded] = useState(false);
   const [isConfigured, setIsConfigured] = useState(false);
-  const photo = useUnsplashPhoto();
+  const { photo } = useUnsplashPhoto();
 
   return (
     <Wrapper className={`${isImageLoaded ? '' : 'hidden'}`}>
@@ -17,13 +17,15 @@ const App = () => {
         src={photo?.fullImageUrl}
         onLoad={() => setIsImageLoaded(true)}
       />
-      {isImageLoaded &&
-        (isConfigured ? (
-          <Forecast />
-        ) : (
-          <Configure onSubmit={() => setIsConfigured(true)} />
-        ))}
-      {photo?.user && <UserCredit {...photo.user} />}
+      <Content>
+        {isImageLoaded &&
+          (isConfigured ? (
+            <Forecast />
+          ) : (
+            <Configure onSubmit={() => setIsConfigured(true)} />
+          ))}
+      </Content>
+      {isImageLoaded && photo?.user && <UserCredit {...photo.user} />}
     </Wrapper>
   );
 };

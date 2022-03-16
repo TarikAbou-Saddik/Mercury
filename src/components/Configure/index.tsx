@@ -2,7 +2,7 @@ import { FormEvent, useState, useRef } from 'react';
 import { faCircleXmark } from '@fortawesome/free-solid-svg-icons';
 import CitySelector from '../CitySelector';
 import useSessionStorage from '../../hooks/useSessionStorage';
-import { Location } from '../../hooks/useGeoCodeByLocation';
+import { Location, locationToString } from '../../hooks/useGeoCodeByLocation';
 import {
   Wrapper,
   FormWrapper,
@@ -38,9 +38,7 @@ const Configure = ({ onSubmit }: ConfigureProps) => {
 
   const onSelectLocation = (location: Location) => {
     setLocation(location);
-    setLocationQuery(
-      `${location.name}, ${location.state}, ${location.country}`,
-    );
+    setLocationQuery(locationToString(location));
   };
 
   const onChangeLocation = (value: string) => {
@@ -69,7 +67,7 @@ const Configure = ({ onSubmit }: ConfigureProps) => {
         </Label>
         <Label>
           City
-          <InputWrapper tabIndex={0}>
+          <InputWrapper>
             <Input
               type='text'
               placeholder='Enter your city...'
