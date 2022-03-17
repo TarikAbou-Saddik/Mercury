@@ -14,26 +14,24 @@ const TextInput = ({
   onValueChange,
   value,
   ...inputProps
-}: TextInputProps) => {
-  return (
-    <Label>
-      {labelName}
-      <InputWrapper>
-        <Input
-          type='text'
-          value={value}
-          onChange={e => onValueChange(e.target.value)}
-          {...inputProps}
-        />
-        <Icon
-          className={value && value.length > 0 ? '' : 'hidden'}
-          icon={faCircleXmark}
-          onClick={() => onValueChange('')}
-        />
-      </InputWrapper>
-    </Label>
-  );
-};
+}: TextInputProps) => (
+  <Label>
+    {labelName}
+    <InputWrapper>
+      <Input
+        type='text'
+        value={value}
+        onChange={e => onValueChange(e.target.value)}
+        {...inputProps}
+      />
+      <Icon
+        className={value && value.length > 0 ? '' : 'hidden'}
+        icon={faCircleXmark}
+        onClick={() => onValueChange('')}
+      />
+    </InputWrapper>
+  </Label>
+);
 
 export const InputWrapper = styled.div`
   margin-top: 10px;

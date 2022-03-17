@@ -16,26 +16,34 @@ const defaultLocation: Location = {
   formattedName: '',
 };
 
-const CitySelector = () => {
-  const [location, setLocation] = useSessionStorage(
-    'location',
-    defaultLocation,
-  );
-  const [cityQuery, setCityQuery] = useState('');
-  const locations = useGeoCodeByLocation(location.formattedName);
+type CitySelectorProps = {
+  labelName?: string;
+};
+
+const CitySelector = ({ labelName }: CitySelectorProps) => {
+  const setLocation = useSessionStorage('location', defaultLocation)[1];
+  const [cityName, setCityName] = useState('');
+  const [locationQuery, setLocationQuery] = useState('');
+  const locations = useGeoCodeByLocation(locationQuery);
 
   const onSelectLocation = (location: Location) => {
     setLocation(location);
-    setCityQuery(locationToString(location));
+    setCityName(locationToString(location));
+    setLocationQuery('');
+  };
+
+  const onCityNameChange = (value: string) => {
+    setCityName(value);
+    setLocationQuery(value);
   };
 
   return (
     <>
       <TextInput
-        labelName='City'
-        value={cityQuery}
+        labelName={labelName || ''}
+        value={cityName}
         placeholder='Enter your city...'
-        onValueChange={val => setCityQuery(val)}
+        onValueChange={val => onCityNameChange(val)}
       />
       <CitiesWrapper>
         {locations.length > 0 &&

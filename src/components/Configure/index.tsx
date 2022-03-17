@@ -26,7 +26,7 @@ const Configure = ({ onSubmit }: ConfigureProps) => {
           placeholder='Enter your name...'
           onValueChange={val => setUserName(val)}
         />
-        <CitySelector />
+        <CitySelector labelName='City' />
         <Button>Submit</Button>
       </FormWrapper>
     </Wrapper>
