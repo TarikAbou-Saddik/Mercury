@@ -1,10 +1,9 @@
-import { useState } from 'react';
+import { useState, Dispatch, SetStateAction } from 'react';
 
-function useSessionStorage<T>(
-  key: string,
-  initialValue?: T,
-): [savedValue: T, setValue: (value: T) => void] {
-  const [savedValue, setSavedValue] = useState(() => {
+type SetValue<T> = Dispatch<SetStateAction<T>>;
+
+function useSessionStorage<T>(key: string, initialValue?: T): [T, SetValue<T>] {
+  const [savedValue, setSavedValue] = useState<T>(() => {
     try {
       const item = window.sessionStorage.getItem(key);
       return item ? JSON.parse(item) : initialValue;
@@ -14,7 +13,7 @@ function useSessionStorage<T>(
     }
   });
 
-  const setValue = (value: T) => {
+  const setValue: SetValue<T> = value => {
     try {
       const valueToStore: T =
         value instanceof Function ? value(savedValue) : value;

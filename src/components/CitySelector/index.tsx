@@ -1,26 +1,51 @@
 import styled from 'styled-components';
+import { useState } from 'react';
 import useGeoCodeByLocation, {
   Location,
   locationToString,
 } from '../../hooks/useGeoCodeByLocation';
+import TextInput from '../TextInput';
+import useSessionStorage from '../../hooks/useSessionStorage';
 
-type CitySelectorProps = {
-  locationString: string;
-  onSelect: (location: Location) => void;
+const defaultLocation: Location = {
+  name: '',
+  lon: null,
+  lat: null,
+  state: '',
+  country: '',
+  formattedName: '',
 };
 
-const CitySelector = ({ locationString, onSelect }: CitySelectorProps) => {
-  const locations = useGeoCodeByLocation(locationString);
+const CitySelector = () => {
+  const [location, setLocation] = useSessionStorage(
+    'location',
+    defaultLocation,
+  );
+  const [cityQuery, setCityQuery] = useState('');
+  const locations = useGeoCodeByLocation(location.formattedName);
+
+  const onSelectLocation = (location: Location) => {
+    setLocation(location);
+    setCityQuery(locationToString(location));
+  };
 
   return (
-    <CitiesWrapper>
-      {locations.length > 0 &&
-        locations.map((location, idx: number) => (
-          <City key={idx} onClick={() => onSelect({ ...location })}>
-            <h4>{locationToString(location)}</h4>
-          </City>
-        ))}
-    </CitiesWrapper>
+    <>
+      <TextInput
+        labelName='City'
+        value={cityQuery}
+        placeholder='Enter your city...'
+        onValueChange={val => setCityQuery(val)}
+      />
+      <CitiesWrapper>
+        {locations.length > 0 &&
+          locations.map((location, idx: number) => (
+            <City key={idx} onClick={() => onSelectLocation(location)}>
+              <h4>{locationToString(location)}</h4>
+            </City>
+          ))}
+      </CitiesWrapper>
+    </>
   );
 };
 

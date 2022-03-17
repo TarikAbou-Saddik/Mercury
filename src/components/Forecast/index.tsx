@@ -38,43 +38,38 @@ const Forecast = () => {
     temp ? `${Math.ceil(temp)}${'\u00b0'}` : '';
 
   return (
-    <ForecastWrapper>
+    <ForecastWrapper className={isLoading ? 'hidden' : ''}>
       <Header userName={userName}></Header>
-      {!isLoading && (
-        <>
-          <CurrentWeatherContainer>
-            <LocationAndDateWrapper>
-              <p>{getDateString(forecast?.current.datetime)}</p>
-              <div>
-                <h3>{(location as Location).name}</h3>
-                {getUnicodeFlagIcon(location.country)}
-              </div>
-            </LocationAndDateWrapper>
-            <TemperatureWrapper>
-              <h1>{formatTemp(forecast?.current.temperature)}</h1>
-              <TemperatureDetails>
-                <WeatherIcon size='lg' icon={forecast?.current.weatherIcon} />
-                <h2>{forecast?.current.weatherIcon.longDescription}</h2>
-                <p>
-                  Today, the high will be
-                  {formatTemp(forecast?.daily[0].tempMax)} with winds at{' '}
-                  {forecast?.current.windSpeed.toFixed(1)} km/h
-                </p>
-              </TemperatureDetails>
-            </TemperatureWrapper>
-          </CurrentWeatherContainer>
-          <ForecastList>
-            {forecast?.daily.map((dailyForecast, idx) => (
-              <DailyForecastWrapper key={idx}>
-                <h1>{getDay(dailyForecast.datetime)}</h1>
-                <WeatherIcon size='md' icon={dailyForecast.weatherIcon} />
-                <h2>{formatTemp(dailyForecast.tempDay)}</h2>
-                <p>{dailyForecast.weatherIcon.longDescription}</p>
-              </DailyForecastWrapper>
-            ))}
-          </ForecastList>
-        </>
-      )}
+      <CurrentWeatherContainer>
+        <LocationAndDateWrapper>
+          <p>{getDateString(forecast?.current.datetime)}</p>
+          <div>
+            <h3>{(location as Location).name}</h3>
+            {getUnicodeFlagIcon(location.country)}
+          </div>
+        </LocationAndDateWrapper>
+        <TemperatureWrapper>
+          <h1>{formatTemp(forecast?.current.temperature)}</h1>
+          <TemperatureDetails>
+            <WeatherIcon size='lg' icon={forecast?.current.weatherIcon} />
+            <h2>{forecast?.current.weatherIcon.longDescription}</h2>
+            <p>
+              Today, the high will be {formatTemp(forecast?.daily[0].tempMax)}{' '}
+              with winds at {forecast?.current.windSpeed.toFixed(1)} km/h
+            </p>
+          </TemperatureDetails>
+        </TemperatureWrapper>
+      </CurrentWeatherContainer>
+      <ForecastList>
+        {forecast?.daily.map((dailyForecast, idx) => (
+          <DailyForecastWrapper key={idx}>
+            <h1>{getDay(dailyForecast.datetime)}</h1>
+            <WeatherIcon size='md' icon={dailyForecast.weatherIcon} />
+            <h2>{formatTemp(dailyForecast.tempDay)}</h2>
+            <p>{dailyForecast.weatherIcon.longDescription}</p>
+          </DailyForecastWrapper>
+        ))}
+      </ForecastList>
     </ForecastWrapper>
   );
 };
@@ -86,9 +81,15 @@ const ForecastWrapper = styled.div`
   align-items: center;
   position: absolute;
   top: 8vh;
+  opacity: 1;
+  transition: opacity 0.4s ease-in-out;
 
   & p {
     font-weight: 100;
+  }
+
+  &.hidden {
+    opacity: 0;
   }
 `;
 

@@ -1,6 +1,8 @@
 import styled from 'styled-components';
 
 export const Wrapper = styled.div`
+  height: 100vh;
+  width: 100vw;
   opacity: 1;
   transition: opacity 0.5s ease-in;
   &.hidden {

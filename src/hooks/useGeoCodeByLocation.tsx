@@ -6,6 +6,7 @@ export interface Location {
   country: string;
   lat: number | null;
   lon: number | null;
+  formattedName: string;
 }
 
 type LocationByQueryString = {
@@ -21,6 +22,7 @@ const useGeoCodeByLocation = (location: string) => {
     country: location.country,
     lat: location.lat,
     lon: location.lon,
+    formattedName: locationToString(location),
   });
 
   useEffect(() => {
@@ -40,7 +42,7 @@ const useGeoCodeByLocation = (location: string) => {
 };
 
 export const locationToString = ({ name, state, country }: Location) => {
-  if (state.length) {
+  if (state && state.length) {
     return `${name}, ${state}, ${country}`;
   }
   return `${name}, ${country}`;
