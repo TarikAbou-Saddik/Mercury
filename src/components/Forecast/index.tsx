@@ -1,15 +1,21 @@
 import styled from 'styled-components';
 import getUnicodeFlagIcon from 'country-flag-icons/unicode';
-import { Location } from '../../hooks/useGeoCodeByLocation';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faArrowLeftLong } from '@fortawesome/free-solid-svg-icons';
 import useOpenWeatherForecast from '../../hooks/useOpenWeatherForecast';
 import useSessionStorage from '../../hooks/useSessionStorage';
 import Header from '../Header';
 import WeatherIcon from '../WeatherIcon';
+import { Config } from '../../global/types';
+import { defaultConfig } from '../../global/defaults';
 
-const Forecast = () => {
-  const [userName] = useSessionStorage<string>('userName');
-  const [location] = useSessionStorage<Location>('location');
-  const { forecast, isLoading } = useOpenWeatherForecast(location as Location);
+type ForecastProps = {
+  onReset: () => void;
+};
+
+const Forecast = ({ onReset }: ForecastProps) => {
+  const [config, setConfig] = useSessionStorage<Config>('mercuryConfig');
+  const { forecast, isLoading } = useOpenWeatherForecast(config.location);
 
   const getDateString = (dateTime: number | undefined): string => {
     if (!dateTime) {
@@ -37,59 +43,104 @@ const Forecast = () => {
   const formatTemp = (temp: number | undefined): string =>
     temp ? `${Math.ceil(temp)}${'\u00b0'}` : '';
 
+  const onHandleReset = () => {
+    setConfig(c => ({ ...c, location: defaultConfig.location }));
+    onReset();
+  };
+
   return (
-    <ForecastWrapper className={isLoading ? 'hidden' : ''}>
-      <Header userName={userName}></Header>
-      <CurrentWeatherContainer>
-        <LocationAndDateWrapper>
-          <p>{getDateString(forecast?.current.datetime)}</p>
-          <div>
-            <h3>{(location as Location).name}</h3>
-            {getUnicodeFlagIcon(location.country)}
-          </div>
-        </LocationAndDateWrapper>
-        <TemperatureWrapper>
-          <h1>{formatTemp(forecast?.current.temperature)}</h1>
-          <TemperatureDetails>
-            <WeatherIcon size='lg' icon={forecast?.current.weatherIcon} />
-            <h2>{forecast?.current.weatherIcon.longDescription}</h2>
-            <p>
-              Today, the high will be {formatTemp(forecast?.daily[0].tempMax)}{' '}
-              with winds at {forecast?.current.windSpeed.toFixed(1)} km/h
-            </p>
-          </TemperatureDetails>
-        </TemperatureWrapper>
-      </CurrentWeatherContainer>
-      <ForecastList>
-        {forecast?.daily.map((dailyForecast, idx) => (
-          <DailyForecastWrapper key={idx}>
-            <h1>{getDay(dailyForecast.datetime)}</h1>
-            <WeatherIcon size='md' icon={dailyForecast.weatherIcon} />
-            <h2>{formatTemp(dailyForecast.tempDay)}</h2>
-            <p>{dailyForecast.weatherIcon.longDescription}</p>
-          </DailyForecastWrapper>
-        ))}
-      </ForecastList>
-    </ForecastWrapper>
+    <Container className={isLoading ? 'hidden' : ''}>
+      <ResetWrapper onClick={onHandleReset}>
+        <FontAwesomeIcon icon={faArrowLeftLong} />
+        <h1>Search another city...</h1>
+      </ResetWrapper>
+      <ForecastWrapper>
+        <Header userName={config.userName}></Header>
+        <CurrentWeatherContainer>
+          <LocationAndDateWrapper>
+            <p>{getDateString(forecast?.current.datetime)}</p>
+            <div>
+              <h3>{config.location.name}</h3>
+              {getUnicodeFlagIcon(config.location.country)}
+            </div>
+          </LocationAndDateWrapper>
+          <TemperatureWrapper>
+            <h1>{formatTemp(forecast?.current.temperature)}</h1>
+            <TemperatureDetails>
+              <WeatherIcon size='lg' icon={forecast?.current.weatherIcon} />
+              <h2>{forecast?.current.weatherIcon.longDescription}</h2>
+              <p>
+                Today, the high will be {formatTemp(forecast?.daily[0].tempMax)}{' '}
+                with winds at {forecast?.current.windSpeed.toFixed(1)} km/h
+              </p>
+            </TemperatureDetails>
+          </TemperatureWrapper>
+        </CurrentWeatherContainer>
+        <ForecastList>
+          {forecast?.daily.map((dailyForecast, idx) => (
+            <DailyForecastWrapper key={idx}>
+              <h1>{getDay(dailyForecast.datetime)}</h1>
+              <WeatherIcon size='md' icon={dailyForecast.weatherIcon} />
+              <h2>{formatTemp(dailyForecast.tempDay)}</h2>
+              <p>{dailyForecast.weatherIcon.longDescription}</p>
+            </DailyForecastWrapper>
+          ))}
+        </ForecastList>
+      </ForecastWrapper>
+    </Container>
   );
 };
+
+const Container = styled.div`
+  position: absolute;
+  top: 8vh;
+  opacity: 1;
+
+  &.hidden {
+    opacity: 0;
+  }
+`;
+
+const ResetWrapper = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: space-evenly;
+  position: fixed;
+  top: 3vh;
+  left: 2vw;
+  width: 10vw;
+  cursor: pointer;
+  color: white;
+
+  & h1 {
+    font-size: 1rem;
+    font-weight: 400;
+    color: rgba(255, 255, 255, 0.7);
+  }
+
+  & svg {
+    opacity: 0;
+  }
+
+  &:hover h1 {
+    text-decoration: underline;
+    color: white;
+  }
+
+  &:hover svg {
+    opacity: 1;
+  }
+`;
 
 const ForecastWrapper = styled.div`
   height: 70vh;
   display: flex;
   flex-direction: column;
   align-items: center;
-  position: absolute;
-  top: 8vh;
-  opacity: 1;
   transition: opacity 0.4s ease-in-out;
 
   & p {
     font-weight: 100;
-  }
-
-  &.hidden {
-    opacity: 0;
   }
 `;
 

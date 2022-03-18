@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Location } from './useGeoCodeByLocation';
+import { Location } from '../global/types';
 
 export interface Icon {
   id: number;

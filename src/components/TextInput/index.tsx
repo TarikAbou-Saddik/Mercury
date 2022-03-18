@@ -1,37 +1,48 @@
 import styled from 'styled-components';
-import { HTMLAttributes } from 'react';
+import { InputHTMLAttributes } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCircleXmark } from '@fortawesome/free-solid-svg-icons';
 
-interface TextInputProps extends HTMLAttributes<HTMLInputElement> {
+export type InputError = {
+  name: string;
+  errorMessage: string;
+};
+
+interface TextInputProps extends InputHTMLAttributes<HTMLInputElement> {
   value: string;
   onValueChange: (value: any) => void;
   labelName?: string;
+  error?: InputError;
 }
 
 const TextInput = ({
   labelName,
   onValueChange,
   value,
+  error,
   ...inputProps
-}: TextInputProps) => (
-  <Label>
-    {labelName}
-    <InputWrapper>
-      <Input
-        type='text'
-        value={value}
-        onChange={e => onValueChange(e.target.value)}
-        {...inputProps}
-      />
-      <Icon
-        className={value && value.length > 0 ? '' : 'hidden'}
-        icon={faCircleXmark}
-        onClick={() => onValueChange('')}
-      />
-    </InputWrapper>
-  </Label>
-);
+}: TextInputProps) => {
+  console.log('Rendering TextInput');
+  return (
+    <Label>
+      <span className={error ? 'error' : ''}>{labelName}</span>
+      <InputWrapper>
+        <Input
+          type='text'
+          value={value}
+          onChange={e => onValueChange(e.target.value)}
+          {...inputProps}
+        />
+        <Icon
+          className={value && value.length > 0 ? '' : 'hidden'}
+          icon={faCircleXmark}
+          onClick={() => onValueChange('')}
+        />
+      </InputWrapper>
+      {error && <span className='error-message'>{error.errorMessage}</span>}
+    </Label>
+  );
+};
 
 export const InputWrapper = styled.div`
   margin-top: 10px;
@@ -41,9 +52,6 @@ export const InputWrapper = styled.div`
   padding: 2px 10px;
   border-radius: 10px;
   box-shadow: rgb(15 15 15 / 10%) 0px 0px 0px 1px inset;
-  &:focus {
-    background: aqua;
-  }
 `;
 
 export const Input = styled.input`
@@ -62,6 +70,16 @@ export const Label = styled.label`
   flex-direction: column;
   cursor: pointer;
   font-size: 1.2rem;
+
+  & span.error {
+    color: red;
+  }
+
+  & span.error-message {
+    color: red;
+    font-size: 0.8rem;
+    margin-bottom: 10px;
+  }
 `;
 
 export const Icon = styled(FontAwesomeIcon)`

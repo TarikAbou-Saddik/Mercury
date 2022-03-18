@@ -1,13 +1,5 @@
 import { useEffect, useState } from 'react';
-
-export interface Location {
-  name: string;
-  state: string;
-  country: string;
-  lat: number | null;
-  lon: number | null;
-  formattedName: string;
-}
+import { Location } from '../global/types';
 
 type LocationByQueryString = {
   [key: string]: Location[];

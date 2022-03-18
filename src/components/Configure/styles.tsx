@@ -20,7 +20,7 @@ export const Wrapper = styled.div`
 `;
 
 export const FormWrapper = styled.form`
-  height: 30vh;
+  height: 35vh;
   display: flex;
   flex-direction: column;
   justify-content: space-around;
@@ -68,9 +68,6 @@ export const InputWrapper = styled.div`
   padding: 2px 10px;
   border-radius: 10px;
   box-shadow: rgb(15 15 15 / 10%) 0px 0px 0px 1px inset;
-  &:focus {
-    background: aqua;
-  }
 `;
 
 export const Input = styled.input`
@@ -88,4 +85,32 @@ export const Label = styled.label`
   flex-direction: column;
   cursor: pointer;
   font-size: 1.2rem;
+`;
+
+export const CityInputWrapper = styled.div`
+  position: relative;
+`;
+
+export const CitiesWrapper = styled.div`
+  width: 17vw;
+  position: absolute;
+  background: white;
+  border-radius: 10px;
+`;
+
+export const City = styled.div`
+  cursor: pointer;
+  height: 4vh;
+  padding: 5px 10px;
+  transition: all 0.2s ease-in;
+  border-radius: 10px;
+  & h4 {
+    font-weight: 300;
+  }
+  &:hover {
+    background: lightgray;
+    & h4 {
+      font-weight: 400;
+    }
+  }
 `;
