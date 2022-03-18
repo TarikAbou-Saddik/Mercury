@@ -5,7 +5,6 @@ import useOpenWeatherForecast from '../../hooks/useOpenWeatherForecast';
 import useSessionStorage from '../../hooks/useSessionStorage';
 import Header from '../Header';
 import WeatherIcon from '../WeatherIcon';
-import CitySelector from '../CitySelector';
 
 const Forecast = () => {
   const [userName] = useSessionStorage<string>('userName');
@@ -41,7 +40,6 @@ const Forecast = () => {
   return (
     <ForecastWrapper className={isLoading ? 'hidden' : ''}>
       <Header userName={userName}></Header>
-      {/* <CitySelector /> */}
       <CurrentWeatherContainer>
         <LocationAndDateWrapper>
           <p>{getDateString(forecast?.current.datetime)}</p>
@@ -81,7 +79,6 @@ const ForecastWrapper = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: space-evenly;
   position: absolute;
   top: 8vh;
   opacity: 1;
@@ -100,7 +97,7 @@ const CurrentWeatherContainer = styled.div`
   margin-top: 5vh;
   background: rgba(255, 255, 255, 0.75);
   width: 30vw;
-  height: 50vh;
+  height: 45vh;
   border-radius: 15px;
   padding: 3vh 2.5vw;
 `;

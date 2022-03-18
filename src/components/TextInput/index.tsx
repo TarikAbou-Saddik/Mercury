@@ -4,9 +4,9 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCircleXmark } from '@fortawesome/free-solid-svg-icons';
 
 interface TextInputProps extends HTMLAttributes<HTMLInputElement> {
-  labelName: string;
   value: string;
   onValueChange: (value: any) => void;
+  labelName?: string;
 }
 
 const TextInput = ({
@@ -54,6 +54,7 @@ export const Input = styled.input`
   &:focus {
     outline: none;
   }
+  background: inherit;
 `;
 
 export const Label = styled.label`
