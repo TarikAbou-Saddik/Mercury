@@ -2,6 +2,7 @@ import { useState } from 'react';
 import Configure from '../components/Configure';
 import Forecast from '../components/Forecast';
 import UserCredit from '../components/UserCredit';
+import { defaultConfig } from '../global/defaults';
 import { Config } from '../global/types';
 import useSessionStorage from '../hooks/useSessionStorage';
 import useUnsplashPhoto from '../hooks/useUnsplashPhoto';
@@ -9,9 +10,9 @@ import { Wrapper, Image, Content } from './styles';
 
 const App = () => {
   const [isImageLoaded, setIsImageLoaded] = useState(false);
-  const [config] = useSessionStorage<Config>('mercuryConfig');
+  const [config] = useSessionStorage<Config>('mercuryConfig', defaultConfig);
   const [isConfigured, setIsConfigured] = useState(
-    config.location.lon !== null,
+    config?.location.lon !== null,
   );
   const { photo } = useUnsplashPhoto();
 

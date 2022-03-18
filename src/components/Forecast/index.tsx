@@ -60,8 +60,8 @@ const Forecast = ({ onReset }: ForecastProps) => {
           <LocationAndDateWrapper>
             <p>{getDateString(forecast?.current.datetime)}</p>
             <div>
-              <h3>{config.location.name}</h3>
-              {getUnicodeFlagIcon(config.location.country)}
+              <h3>{config?.location.name}</h3>
+              {getUnicodeFlagIcon(config?.location.country)}
             </div>
           </LocationAndDateWrapper>
           <TemperatureWrapper>
