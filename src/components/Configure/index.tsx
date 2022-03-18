@@ -131,10 +131,14 @@ const Configure = ({ onSubmit }: ConfigureProps) => {
             onValueChange={val => onLocationChange(val)}
             error={getErrorByField('location')}
           />
-          <CitiesWrapper>
+          <CitiesWrapper tabIndex={0}>
             {locations.length > 0 &&
               locations.map((location, idx: number) => (
-                <City key={idx} onClick={() => onSelectLocation(location)}>
+                <City
+                  key={idx}
+                  onClick={() => onSelectLocation(location)}
+                  tabIndex={-1}
+                >
                   <h4>{locationToString(location)}</h4>
                 </City>
               ))}
