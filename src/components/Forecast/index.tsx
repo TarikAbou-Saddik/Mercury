@@ -71,7 +71,8 @@ const Forecast = ({ onReset }: ForecastProps) => {
               <h2>{forecast?.current.weatherIcon.longDescription}</h2>
               <p>
                 Today, the high will be {formatTemp(forecast?.daily[0].tempMax)}{' '}
-                with winds at {forecast?.current.windSpeed.toFixed(1)} km/h
+                with winds at {Math.floor(forecast?.current.windSpeed || 0)}{' '}
+                km/h
               </p>
             </TemperatureDetails>
           </TemperatureWrapper>
@@ -95,6 +96,7 @@ const Container = styled.div`
   position: absolute;
   top: 8vh;
   opacity: 1;
+  transition: opacity 0.3s ease-in;
 
   &.hidden {
     opacity: 0;
