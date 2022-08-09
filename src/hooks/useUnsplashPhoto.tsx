@@ -30,21 +30,23 @@ const useUnsplashPhoto = () => {
         `/api/unsplashCollections?collectionId=${collection}`,
       );
       const { photos } = await response.json();
-      const photo = photos[getRandomNumber(photos.length)];
-      setPhoto({
-        id: photo.id,
-        description: photo.description,
-        width: photo.width,
-        height: photo.height,
-        fullImageUrl: photo.urls.full,
-        regImageUrl: photo.urls.regular,
-        user: {
-          id: photo.user.id,
-          name: photo.user.name,
-          portfolioUrl: photo.user.portfolio_url || photo.user.links.html,
-          profileImage: photo.user.profile_image.small || '',
-        },
-      });
+      if (photos) {
+        const photo = photos[getRandomNumber(photos.length)];
+        setPhoto({
+          id: photo.id,
+          description: photo.description,
+          width: photo.width,
+          height: photo.height,
+          fullImageUrl: photo.urls.full,
+          regImageUrl: photo.urls.regular,
+          user: {
+            id: photo.user.id,
+            name: photo.user.name,
+            portfolioUrl: photo.user.portfolio_url || photo.user.links.html,
+            profileImage: photo.user.profile_image.small || '',
+          },
+        });
+      }
     };
     getPhoto();
   }, []);
